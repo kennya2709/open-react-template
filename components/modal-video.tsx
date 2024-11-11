@@ -12,8 +12,8 @@ interface ModalVideoProps {
   thumbHeight: number;
   thumbAlt: string;
   video: string;
-  videoWidth: number;
-  videoHeight: number;
+  videoWidth?: number | string;  // Opcional y puede ser un string
+  videoHeight?: number | string; // Opcional y puede ser un string
 }
 
 export default function ModalVideo({
@@ -22,8 +22,8 @@ export default function ModalVideo({
   thumbHeight,
   thumbAlt,
   video,
-  videoWidth,
-  videoHeight,
+  videoWidth = 375,  // Ancho ajustado
+  videoHeight = 750, // Alto ajustado para un poco más de altura
 }: ModalVideoProps) {
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -94,9 +94,9 @@ export default function ModalVideo({
               </defs>
             </svg>
             <span className="text-sm font-medium leading-tight text-gray-300">
-              Watch Demo
+              Ver video
               <span className="text-gray-600"> - </span>
-              3:47
+              1:31
             </span>
           </span>
         </span>
@@ -113,17 +113,20 @@ export default function ModalVideo({
           className="fixed inset-0 z-[99999] bg-black/70 transition-opacity duration-300 ease-out data-[closed]:opacity-0"
         />
         <div className="fixed inset-0 z-[99999] flex px-4 py-6 sm:px-6">
-          <div className="mx-auto flex h-full max-w-6xl items-center">
+          <div className="mx-auto flex h-full max-w-xs items-center">
+            {/* max-w-xs limita el ancho a un tamaño similar al de un celular */}
             <DialogPanel
               transition
-              className="aspect-video max-h-full w-full overflow-hidden rounded-2xl bg-black shadow-2xl duration-300 ease-out data-[closed]:scale-95 data-[closed]:opacity-0"
+              className="aspect-[9/18] max-h-full w-full overflow-hidden rounded-2xl bg-black shadow-2xl duration-300 ease-out data-[closed]:scale-95 data-[closed]:opacity-0"
             >
               <video
                 ref={videoRef}
-                width={videoWidth}
-                height={videoHeight}
+                width={videoWidth} // Usa el ancho de un celular
+                height={videoHeight} // Usa el alto ajustado
                 loop
                 controls
+                autoPlay // Reproduce automáticamente el video
+                className="w-full h-auto max-h-[90vh]" // Ajustes CSS adicionales
               >
                 <source src={video} type="video/mp4" />
                 Your browser does not support the video tag.
